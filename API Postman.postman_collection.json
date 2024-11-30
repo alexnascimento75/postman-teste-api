@@ -1,0 +1,275 @@
+{
+	"info": {
+		"_postman_id": "cb949a54-8f6f-45be-9379-a93519db9af3",
+		"name": "API Postman",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "23023710"
+	},
+	"item": [
+		{
+			"name": "Status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:3000/status",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recomendação sucesso",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"$randomFullName\", pm.variables.replaceIn('{{$randomFullName}}'))\r",
+							"\r",
+							"pm.environment.set(\"$randomDescription\", pm.variables.replaceIn('{{$randomLoremSentences}}'))\r",
+							"\r",
+							"pm.environment.set(\"Stars\",Math.floor(Math.random() * (5 * 1 ) + 1 ))\r",
+							"\r",
+							"function situation() {\r",
+							"    var situation = [\"Pendente\", \"Aprovado\", \"Reprovado\"];\r",
+							"\r",
+							"    var randomItem = situation[Math.floor(Math.random () * situation.length)];\r",
+							"\r",
+							"    return randomItem;\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"situation\", situation())\r",
+							"\r",
+							"pm.environment.set(\"Status\", pm.variables.replaceIn('{{$randomBoolean}}'))\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"// Valida que a resposta é JSON válida\r",
+							"pm.test(\"Response is valid JSON\", function () {\r",
+							"    pm.expect(() => pm.response.json()).not.to.throw(); // Garante que a resposta pode ser convertida para JSON\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json(); // Converte a resposta para JSON\r",
+							"\r",
+							"\r",
+							"\r",
+							"pm.test(\"Full Name exists and matches API response\", function () {\r",
+							"    pm.expect(response).to.have.property(\"fullName\"); // Valida que o campo existe\r",
+							"});\r",
+							"\r",
+							"// Testa se a descrição está correta\r",
+							"pm.test(\"Description matches expected value\", function () {\r",
+							"    pm.expect(response).to.have.property(\"description\"); // Valida que oexiste\r",
+							"});\r",
+							"\r",
+							"// Testa se a quantidade de estrelas está correta\r",
+							"pm.test(\"Stars matches expected value\", function () {\r",
+							"    pm.expect(response).to.have.property(\"stars\"); // Valida que o campo existe\r",
+							"});\r",
+							"\r",
+							"// Testa se a situação está correta\r",
+							"pm.test(\"Situation matches expected value\", function () {\r",
+							"    pm.expect(response).to.have.property(\"situation\"); // Valida que o campo existe\r",
+							"});\r",
+							"\r",
+							"// Testa se o status está correto\r",
+							"pm.test(\"Status matches expected value\", function () {\r",
+							"    pm.expect(response).to.have.property(\"status\");\r",
+							"\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fullName\": \"{{$randomFullName}}\",\r\n    \"description\": \"{{$randomDescription}}\",\r\n    \"stars\": {{Stars}},\r\n    \"situation\": \"{{situation}}\",\r\n    \"status\": {{Status}}\r\n}\r\n\r\n\r\n  ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/recommendation",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"recommendation"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"fullName\": \"{{$randomFullName}}\",\r\n    \"description\": \"{{$randomDescription}}\",\r\n    \"stars\": 1,\r\n    \"situation\": \"Pendente\",\r\n    \"status\": true\r\n}\r\n\r\n\r\n  ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/recommendation",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"recommendation"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Acess-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Acess-Control-Allow-Methods",
+							"value": "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+						},
+						{
+							"key": "Acess-Control-Allow-Headers",
+							"value": "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "478"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1de-Xehe76PpN+PHyY8ban3kmuQ32NM\""
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 30 Nov 2024 00:01:52 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"fullName\": \"Fannie Stamm\",\n    \"description\": \"Explicabo et suscipit occaecati non dolorem reprehenderit iusto esse. A blanditiis odit est dolor quo consequatur. Sit facere doloremque necessitatibus enim quia aut quos. Repudiandae occaecati earum odit et rerum laborum velit. Natus nisi similique quia recusandae non minima. Nihil provident sed aut qui error quod tempora temporibus molestiae.\",\n    \"stars\": 1,\n    \"situation\": \"Pendente\",\n    \"status\": true,\n    \"_id\": \"674a55f0edc38fbe234b6c5f\",\n    \"__v\": 0\n}"
+				}
+			]
+		},
+		{
+			"name": "Recomendação nome",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fullName\": \"Axel Nato\",\r\n    \"description\": \"teste\",\r\n    \"stars\": 1,\r\n    \"situation\": \"Pendente\",\r\n    \"status\": true\r\n}\r\n\r\n\r\n  ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:3000/api/recommendation",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"recommendation"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "{{url}}/api/recommendation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fullName\": \"{{$randomFullName}}\",\r\n    \"description\": \"{{$randomDescription}}\",\r\n    \"stars\": 1,\r\n    \"situation\": \"Pendente\",\r\n    \"status\": true\r\n}\r\n\r\n\r\n  ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/api/recommendation",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"recommendation"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
